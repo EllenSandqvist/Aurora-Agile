@@ -16,7 +16,6 @@ function ModalWindow(props) {
   const [doDateInput, setDoDateInput] = useState('');
   const [deadlineInput, setDeadLineInput] = useState('');
   const { assignedToSave } = useContext(DataContext);
-
   const dispatch = useDispatch();
 
   useEffect(() => {

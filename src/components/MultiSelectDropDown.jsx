@@ -11,9 +11,6 @@ const MultiSelectDropDown = ({
   users,
   selected_users,
   set_Selected_users,
-  selectedUsersId,
-  setSelectedUsersId,
-  onSelectedUsersChange,
 }) => {
   const dispatch = useDispatch();
 
@@ -25,14 +22,14 @@ const MultiSelectDropDown = ({
 
   useEffect(() => {
     editAssignedToHandler();
-    onSelectedUsersChange(selectedUsersId);
-  }, [selectedUsersId, selected_users]);
+  }, [selected_users]);
 
   const editAssignedToHandler = () => {
+    const assignedIds = selected_users.map((user) => user.id);
     const editedTask = {
       ...task,
       taskId: task.id,
-      assignedTo: selectedUsersId,
+      assignedTo: assignedIds,
       newTitle: task.title,
       newDescription: task.description,
       newDeadline: task.deadline,
@@ -50,14 +47,6 @@ const MultiSelectDropDown = ({
     }
   };
 
-  const handleSetSelectedUsersId = (userId) => {
-    if (selectedUsersId.includes(userId)) {
-      setSelectedUsersId(selectedUsersId.filter((item) => item !== userId));
-    } else {
-      setSelectedUsersId([...selectedUsersId, userId]);
-    }
-  };
-
   return (
     <div>
       <Dropdown>
@@ -71,7 +60,6 @@ const MultiSelectDropDown = ({
               key={index}
               onClick={() => {
                 toggleUser(user);
-                handleSetSelectedUsersId(user.id);
               }}
               active={selected_users.includes(user)}
             >

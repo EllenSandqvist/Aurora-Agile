@@ -108,14 +108,8 @@ const column = ({ currentColumn, columnId, user, handleTaskClick }) => {
                   return (
                     <Task
                       key={t.id}
-                      title={t.title}
-                      doDate={t.doDate}
-                      assignedTo={t.assignedTo}
-                      deadline={t.deadline}
                       task={t}
                       onTaskClick={handleTaskClick}
-                      taskId={t.id}
-                      user={user}
                     />
                   );
                 }
@@ -129,12 +123,7 @@ const column = ({ currentColumn, columnId, user, handleTaskClick }) => {
                       <Task
                         key={t.id}
                         task={t}
-                        title={t.title}
-                        doDate={t.doDate}
-                        assignedTo={t.assignedTo}
-                        deadline={t.deadline}
                         onTaskClick={handleTaskClick}
-                        user={user}
                       />
                     );
                   }
