@@ -7,38 +7,43 @@ import CreateNewTask from './CreateNewTask';
 import ModalWindow from './ModalWindow';
 import AddColumn from './AddColumn';
 
-const Board = ({modalShow, setModalShow, selectedTask, handleTaskClick, user}) => {
-
+const Board = ({
+  modalShow,
+  setModalShow,
+  selectedTask,
+  handleTaskClick,
+  user,
+}) => {
   const columns = useSelector((state) => state[columnSlice.name].columns);
 
   return (
     <>
-        <main>
-          <div className='createNewTask_section'>
-            <CreateNewTask />
+      <main>
+        <div className='createNewTask_section'>
+          <CreateNewTask />
+        </div>
+        <div className='column_section'>
+          {columns.map((column) => (
+            <Column
+              key={column.id}
+              currentColumn={column}
+              columnId={column.id}
+              user={user}
+              handleTaskClick={handleTaskClick}
+            />
+          ))}
+          <div className='createNewColumn_section'>
+            <AddColumn />
           </div>
-          <div className='column_section'>
-            {columns.map((column) => (
-              <Column
-                key={column.id}
-                currentColumn={column}
-                columnId={column.id}
-                user={user}
-                handleTaskClick={handleTaskClick}
-              />
-            ))}
-            <div className='createNewColumn_section'>
-              <AddColumn />
-            </div>
-          </div>
-        </main>
-        {selectedTask && (
-          <ModalWindow
-            show={modalShow}
-            onHide={() => setModalShow(false)}
-            task={selectedTask}
-          />
-        )}
+        </div>
+      </main>
+      {selectedTask && (
+        <ModalWindow
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+          task={selectedTask}
+        />
+      )}
     </>
   );
 };

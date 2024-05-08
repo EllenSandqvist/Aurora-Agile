@@ -1,7 +1,6 @@
 //Komponent för modalen, som hanterar ändringar i tasken
 import { useDispatch } from 'react-redux';
-import { useState, useEffect, useContext } from 'react';
-import DataContext from '../context/DataContext';
+import { useState, useEffect } from 'react';
 
 // Components
 import Modal from 'react-bootstrap/Modal';
@@ -11,11 +10,11 @@ import AssignedUsers from './AssignedUsers';
 import { removeTask, editTask } from '../features/task/taskSlice';
 
 function ModalWindow(props) {
+  console.log(props);
   const [titleInput, setTitleInput] = useState('');
   const [descriptionInput, setDescriptionInput] = useState('');
   const [doDateInput, setDoDateInput] = useState('');
   const [deadlineInput, setDeadLineInput] = useState('');
-  const { assignedToSave } = useContext(DataContext);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -33,7 +32,7 @@ function ModalWindow(props) {
   const editTaskHandler = () => {
     const editedTask = {
       taskId: props.task.id,
-      assignedTo: assignedToSave,
+      assignedTo: props.task.assignedTo,
       newTitle: titleInput,
       newDescription: descriptionInput,
       newDeadline: deadlineInput,

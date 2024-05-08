@@ -9,7 +9,6 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
-import { DataProvider } from './context/DataContext';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -26,46 +25,44 @@ function App() {
 
   return (
     <div id='appContainer'>
-      <DataProvider>
-        <Router>
-          <DndProvider backend={HTML5Backend}>
-            <Header
-              user={user}
-              setUser={setUser}
+      <Router>
+        <DndProvider backend={HTML5Backend}>
+          <Header
+            user={user}
+            setUser={setUser}
+          />
+          <Routes>
+            <Route
+              index
+              element={
+                <Board
+                  setModalShow={setModalShow}
+                  modalShow={modalShow}
+                  selectedTask={selectedTask}
+                  handleTaskClick={handleTaskClick}
+                  user={user}
+                />
+              }
             />
-            <Routes>
-              <Route
-                index
-                element={
-                  <Board
-                    setModalShow={setModalShow}
-                    modalShow={modalShow}
-                    selectedTask={selectedTask}
-                    handleTaskClick={handleTaskClick}
-                    user={user}
-                  />
-                }
-              />
-              <Route
-                path='/list'
-                element={
-                  <List
-                    setModalShow={setModalShow}
-                    modalShow={modalShow}
-                    selectedTask={selectedTask}
-                    handleTaskClick={handleTaskClick}
-                  />
-                }
-              />
-              <Route
-                path='*'
-                element={<MissingPage />}
-              />
-            </Routes>
-            <Footer />
-          </DndProvider>
-        </Router>
-      </DataProvider>
+            <Route
+              path='/list'
+              element={
+                <List
+                  setModalShow={setModalShow}
+                  modalShow={modalShow}
+                  selectedTask={selectedTask}
+                  handleTaskClick={handleTaskClick}
+                />
+              }
+            />
+            <Route
+              path='*'
+              element={<MissingPage />}
+            />
+          </Routes>
+          <Footer />
+        </DndProvider>
+      </Router>
     </div>
   );
 }

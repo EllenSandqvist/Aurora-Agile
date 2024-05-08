@@ -1,24 +1,20 @@
 //Denna komponent visar vilka users som är valda till tasken
 import { useSelector } from 'react-redux';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import MultiSelectDropDown from './MultiSelectDropDown';
 
 // Bootstrap:
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 
-import DataContext from '../context/DataContext';
-
 const AssignedUsers = ({ task, show }) => {
   const users = useSelector((state) => state.user.users);
   const [selected_users, set_Selected_users] = useState([]);
-  const { setAssignedToSave } = useContext(DataContext);
 
   useEffect(() => {
     set_Selected_users(
       task.assignedTo.map((id) => users.find((user) => id == user.id))
     );
-    setAssignedToSave(task.assignedTo);
   }, [task]);
 
   return (
