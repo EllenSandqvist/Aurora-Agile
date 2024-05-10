@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 
 const MultiSelectDropDown = ({
   task,
+  setUpdateAssignments,
   users,
   selected_users,
   set_Selected_users,
@@ -35,15 +36,23 @@ const MultiSelectDropDown = ({
       newDeadline: task.deadline,
       newDoDate: task.doDate,
     };
-
+    setUpdateAssignments(assignedIds);
     dispatch(editTask(editedTask));
   };
 
   const toggleUser = (user) => {
-    if (selected_users.includes(user)) {
-      set_Selected_users(selected_users.filter((item) => item !== user));
+    if (user.id == null) {
+      if (selected_users.length == users.length - 1) {
+        set_Selected_users([]);
+      } else {
+        set_Selected_users(users.filter((user) => user.id != null));
+      }
     } else {
-      set_Selected_users([...selected_users, user]);
+      if (selected_users.includes(user)) {
+        set_Selected_users(selected_users.filter((item) => item !== user));
+      } else {
+        set_Selected_users([...selected_users, user]);
+      }
     }
   };
 

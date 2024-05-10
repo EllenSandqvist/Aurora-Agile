@@ -7,7 +7,7 @@ import MultiSelectDropDown from './MultiSelectDropDown';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 
-const AssignedUsers = ({ task, show }) => {
+const AssignedUsers = ({ task, show, setUpdateAssignments }) => {
   const users = useSelector((state) => state.user.users);
   const [selected_users, set_Selected_users] = useState([]);
 
@@ -56,12 +56,14 @@ const AssignedUsers = ({ task, show }) => {
         <OverlayTrigger
           overlay={
             <Tooltip>
-              {selected_users.map((person, i) => (
-                <span key={i}>
-                  {users.find((u) => u.id === person.id).name}
-                  <br />
-                </span>
-              ))}
+              {selected_users.map((person, i) =>
+                i > 2 ? (
+                  <span key={i}>
+                    {users.find((u) => u.id === person.id).name}
+                    <br />
+                  </span>
+                ) : null
+              )}
             </Tooltip>
           }
         >
@@ -72,6 +74,7 @@ const AssignedUsers = ({ task, show }) => {
       {show && (
         <MultiSelectDropDown
           task={task}
+          setUpdateAssignments={setUpdateAssignments}
           users={users}
           selected_users={selected_users}
           set_Selected_users={set_Selected_users}

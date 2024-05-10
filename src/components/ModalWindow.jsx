@@ -9,11 +9,12 @@ import AssignedUsers from './AssignedUsers';
 // Slices
 import { removeTask, editTask } from '../features/task/taskSlice';
 
-function ModalWindow({ onHide, selectedTask }) {
+function ModalWindow({ onHide, selectedTask, setSelectedTask }) {
   const [titleInput, setTitleInput] = useState('');
   const [descriptionInput, setDescriptionInput] = useState('');
   const [doDateInput, setDoDateInput] = useState('');
   const [deadlineInput, setDeadLineInput] = useState('');
+  const [updateAssignments, setUpdateAssignments] = useState('');
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -21,6 +22,7 @@ function ModalWindow({ onHide, selectedTask }) {
     setDescriptionInput(selectedTask.description);
     setDoDateInput(selectedTask.doDate);
     setDeadLineInput(selectedTask.deadline);
+    setUpdateAssignments(selectedTask.assignedTo);
   }, [selectedTask]);
 
   const removeTaskHandler = () => {
@@ -29,9 +31,10 @@ function ModalWindow({ onHide, selectedTask }) {
   };
 
   const editTaskHandler = () => {
+    console.log(selectedTask.assignedTo);
     const editedTask = {
       taskId: selectedTask.id,
-      assignedTo: selectedTask.assignedTo,
+      assignedTo: updateAssignments,
       newTitle: titleInput,
       newDescription: descriptionInput,
       newDeadline: deadlineInput,
@@ -39,6 +42,7 @@ function ModalWindow({ onHide, selectedTask }) {
     };
 
     dispatch(editTask(editedTask));
+
     onHide();
   };
 
@@ -100,6 +104,7 @@ function ModalWindow({ onHide, selectedTask }) {
         <div>
           <AssignedUsers
             task={selectedTask}
+            setUpdateAssignments={setUpdateAssignments}
             show={true}
           />
         </div>
