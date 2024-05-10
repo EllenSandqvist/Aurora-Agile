@@ -1,53 +1,46 @@
 //Denna komponent visar vilka users som är valda till tasken
 import { useSelector } from 'react-redux';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import MultiSelectDropDown from './MultiSelectDropDown';
 
 // Bootstrap:
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 
-import DataContext from '../context/DataContext';
-
-const AssignedUsers = ({ task, show }) => {
+const AssignedUsers = ({ task, show, setUpdateAssignments }) => {
   const users = useSelector((state) => state.user.users);
   const [selected_users, set_Selected_users] = useState([]);
-  const [selectedUsersId, setSelectedUsersId] = useState([]);
-
-  const { setAssignedToSave } = useContext(DataContext);
 
   useEffect(() => {
-    setSelectedUsersId(task.assignedTo);
-    setAssignedToSave(task.assignedTo);
+    set_Selected_users(
+      task.assignedTo.map((id) => users.find((user) => id == user.id))
+    );
   }, [task]);
-
-  // Funktion för att uppdatera assignedToSave när användaren gör ändringar
-  const handleSelectedUsersChange = (selectedUsersId) => {
-    setSelectedUsersId(selectedUsersId);
-    setAssignedToSave(selectedUsersId);
-  };
 
   return (
     <div className='assigned'>
       {/* assigned to är vilka som är assigned på aktuellt task.
   den visar max 3 cirklar. den visar första bokstaven i för- och efternamn.
   vid mer än ett efternamn syns bara första. */}
-      {selectedUsersId.map(
+      {selected_users.map(
         (person, index) =>
           index < 3 && (
             <div key={index}>
               <OverlayTrigger
                 overlay={
-                  <Tooltip> {users.find((u) => u.id === person).name}</Tooltip>
+                  <Tooltip>
+                    {' '}
+                    {users.find((u) => u.id === person.id).name}
+                  </Tooltip>
                 }
               >
                 <div
                   className={`me-1 rounded-circle text-bg-aurora-secondary opacity-${100 - index * 25} circle`}
                 >
-                  {selectedUsersId.length > 0 && (
+                  {selected_users.length > 0 && (
                     <span key={index}>
                       {users
-                        .find((u) => u.id === person)
+                        .find((u) => u.id === person.id)
                         .name.split(' ')
                         .map((name, i) => i < 2 && name.charAt(0))}
                     </span>
@@ -59,16 +52,18 @@ const AssignedUsers = ({ task, show }) => {
       )}
 
       {/* om det finns fler än 3 assignade till uppgiften så visas (...) */}
-      {selectedUsersId.length > 3 && (
+      {selected_users.length > 3 && (
         <OverlayTrigger
           overlay={
             <Tooltip>
-              {selectedUsersId.map((person, i) => (
-                <span key={i}>
-                  {users.find((u) => u.id === person).name}
-                  <br />
-                </span>
-              ))}
+              {selected_users.map((person, i) =>
+                i > 2 ? (
+                  <span key={i}>
+                    {users.find((u) => u.id === person.id).name}
+                    <br />
+                  </span>
+                ) : null
+              )}
             </Tooltip>
           }
         >
@@ -79,12 +74,10 @@ const AssignedUsers = ({ task, show }) => {
       {show && (
         <MultiSelectDropDown
           task={task}
+          setUpdateAssignments={setUpdateAssignments}
           users={users}
           selected_users={selected_users}
           set_Selected_users={set_Selected_users}
-          selectedUsersId={selectedUsersId}
-          setSelectedUsersId={setSelectedUsersId}
-          onSelectedUsersChange={handleSelectedUsersChange}
         />
       )}
     </div>

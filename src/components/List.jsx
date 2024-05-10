@@ -2,14 +2,10 @@
 import { useSelector } from 'react-redux';
 import ModalWindow from './ModalWindow';
 import { columnSlice } from '../features/column/columnSlice';
-import { useContext } from 'react';
 
-import DataContext from '../context/DataContext';
-
-const List = ({ modalShow, setModalShow, selectedTask, handleTaskClick }) => {
+const List = ({ setSelectedTask, selectedTask, handleTaskClick }) => {
   const tasks = useSelector((state) => state.task.tasks);
   const columns = useSelector((state) => state[columnSlice.name].columns);
-  const { assignedToSave, setAssignedToSave } = useContext(DataContext);
 
   return (
     <main className='listContainer'>
@@ -41,9 +37,8 @@ const List = ({ modalShow, setModalShow, selectedTask, handleTaskClick }) => {
       </ul>
       {selectedTask && (
         <ModalWindow
-          show={modalShow}
-          onHide={() => setModalShow(false)}
-          task={selectedTask}
+          onHide={() => setSelectedTask(null)}
+          selectedTask={selectedTask}
         />
       )}
     </main>

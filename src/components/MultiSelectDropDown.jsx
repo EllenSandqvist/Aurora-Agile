@@ -8,12 +8,10 @@ import { useEffect } from 'react';
 
 const MultiSelectDropDown = ({
   task,
+  setUpdateAssignments,
   users,
   selected_users,
   set_Selected_users,
-  selectedUsersId,
-  setSelectedUsersId,
-  onSelectedUsersChange,
 }) => {
   const dispatch = useDispatch();
 
@@ -25,36 +23,36 @@ const MultiSelectDropDown = ({
 
   useEffect(() => {
     editAssignedToHandler();
-    onSelectedUsersChange(selectedUsersId);
-  }, [selectedUsersId, selected_users]);
+  }, [selected_users]);
 
   const editAssignedToHandler = () => {
+    const assignedIds = selected_users.map((user) => user.id);
     const editedTask = {
       ...task,
       taskId: task.id,
-      assignedTo: selectedUsersId,
+      assignedTo: assignedIds,
       newTitle: task.title,
       newDescription: task.description,
       newDeadline: task.deadline,
       newDoDate: task.doDate,
     };
-
+    setUpdateAssignments(assignedIds);
     dispatch(editTask(editedTask));
   };
 
   const toggleUser = (user) => {
-    if (selected_users.includes(user)) {
-      set_Selected_users(selected_users.filter((item) => item !== user));
+    if (user.id == null) {
+      if (selected_users.length == users.length - 1) {
+        set_Selected_users([]);
+      } else {
+        set_Selected_users(users.filter((user) => user.id != null));
+      }
     } else {
-      set_Selected_users([...selected_users, user]);
-    }
-  };
-
-  const handleSetSelectedUsersId = (userId) => {
-    if (selectedUsersId.includes(userId)) {
-      setSelectedUsersId(selectedUsersId.filter((item) => item !== userId));
-    } else {
-      setSelectedUsersId([...selectedUsersId, userId]);
+      if (selected_users.includes(user)) {
+        set_Selected_users(selected_users.filter((item) => item !== user));
+      } else {
+        set_Selected_users([...selected_users, user]);
+      }
     }
   };
 
@@ -71,7 +69,6 @@ const MultiSelectDropDown = ({
               key={index}
               onClick={() => {
                 toggleUser(user);
-                handleSetSelectedUsersId(user.id);
               }}
               active={selected_users.includes(user)}
             >

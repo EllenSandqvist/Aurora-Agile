@@ -21,6 +21,8 @@ const column = ({ currentColumn, columnId, user, handleTaskClick }) => {
   const [showDeletePopup, setShowDeletePopup] = useState(false);
 
   const tasks = useSelector((state) => state.task.tasks);
+
+  const columns = useSelector((state) => state.column.columns);
   const dispatch = useDispatch();
 
   // DROP - React-dnd
@@ -46,6 +48,10 @@ const column = ({ currentColumn, columnId, user, handleTaskClick }) => {
   };
 
   const confirmDeleteColumn = () => {
+    const moveTasks = tasks.filter((task) => task.columnId == columnId);
+    moveTasks.map((task) =>
+      dispatch(moveTask({ taskId: task.id, newColumnId: 1 }))
+    );
     dispatch(removeColumn(currentColumn));
     setShowDeletePopup(false);
   };
@@ -88,8 +94,9 @@ const column = ({ currentColumn, columnId, user, handleTaskClick }) => {
             onChange={(e) => setColumnTitle(e.target.value)}
             onBlur={() => editColumnHandler()}
           ></input>
-
-          <DeleteColumn onClick={() => removeColumnHandler()} />
+          {columns[0] !== currentColumn && (
+            <DeleteColumn onClick={() => removeColumnHandler()} />
+          )}
         </div>
 
         {/* TASKS HOLDER */}
@@ -108,14 +115,8 @@ const column = ({ currentColumn, columnId, user, handleTaskClick }) => {
                   return (
                     <Task
                       key={t.id}
-                      title={t.title}
-                      doDate={t.doDate}
-                      assignedTo={t.assignedTo}
-                      deadline={t.deadline}
                       task={t}
                       onTaskClick={handleTaskClick}
-                      taskId={t.id}
-                      user={user}
                     />
                   );
                 }
@@ -129,12 +130,7 @@ const column = ({ currentColumn, columnId, user, handleTaskClick }) => {
                       <Task
                         key={t.id}
                         task={t}
-                        title={t.title}
-                        doDate={t.doDate}
-                        assignedTo={t.assignedTo}
-                        deadline={t.deadline}
                         onTaskClick={handleTaskClick}
-                        user={user}
                       />
                     );
                   }
@@ -147,6 +143,9 @@ const column = ({ currentColumn, columnId, user, handleTaskClick }) => {
           style={{
             position: 'absolute',
             zIndex: '100',
+            transform: 'translate(-50%, -50%)',
+            top: '50%',
+            left: '50%',
           }}
         >
           <Alert
@@ -154,7 +153,11 @@ const column = ({ currentColumn, columnId, user, handleTaskClick }) => {
             className='delete-popup'
           >
             <Alert.Heading>
-              Are you sure you want to delete this column?
+              Are you sure you want to delete the "{currentColumn.title}"
+              column?
+              <p style={{ fontSize: '15px', marginTop: '1em', color: 'red' }}>
+                Tasks will be moved to the first column
+              </p>
             </Alert.Heading>
             <hr />
             <button

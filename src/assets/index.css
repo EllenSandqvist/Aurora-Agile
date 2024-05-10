@@ -37,6 +37,7 @@ main {
   height: 50%;
   flex-grow: 1;
   overflow: auto;
+  position: relative;
 }
 
 .createNewTask_section {
@@ -78,6 +79,7 @@ main {
   margin: auto;
   overflow-y: auto;
   height: 100%;
+  
 }
 
 .columnHeader {

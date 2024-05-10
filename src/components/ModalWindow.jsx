@@ -1,7 +1,6 @@
 //Komponent för modalen, som hanterar ändringar i tasken
 import { useDispatch } from 'react-redux';
-import { useState, useEffect, useContext } from 'react';
-import DataContext from '../context/DataContext';
+import { useState, useEffect } from 'react';
 
 // Components
 import Modal from 'react-bootstrap/Modal';
@@ -10,31 +9,32 @@ import AssignedUsers from './AssignedUsers';
 // Slices
 import { removeTask, editTask } from '../features/task/taskSlice';
 
-function ModalWindow(props) {
+function ModalWindow({ onHide, selectedTask, setSelectedTask }) {
   const [titleInput, setTitleInput] = useState('');
   const [descriptionInput, setDescriptionInput] = useState('');
   const [doDateInput, setDoDateInput] = useState('');
   const [deadlineInput, setDeadLineInput] = useState('');
-  const { assignedToSave } = useContext(DataContext);
-
+  const [updateAssignments, setUpdateAssignments] = useState('');
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setTitleInput(props.task.title);
-    setDescriptionInput(props.task.description);
-    setDoDateInput(props.task.doDate);
-    setDeadLineInput(props.task.deadline);
-  }, [props.task]);
+    setTitleInput(selectedTask.title);
+    setDescriptionInput(selectedTask.description);
+    setDoDateInput(selectedTask.doDate);
+    setDeadLineInput(selectedTask.deadline);
+    setUpdateAssignments(selectedTask.assignedTo);
+  }, [selectedTask]);
 
   const removeTaskHandler = () => {
-    dispatch(removeTask(props.task.id));
-    props.onHide();
+    dispatch(removeTask(selectedTask.id));
+    onHide();
   };
 
   const editTaskHandler = () => {
+    console.log(selectedTask.assignedTo);
     const editedTask = {
-      taskId: props.task.id,
-      assignedTo: assignedToSave,
+      taskId: selectedTask.id,
+      assignedTo: updateAssignments,
       newTitle: titleInput,
       newDescription: descriptionInput,
       newDeadline: deadlineInput,
@@ -42,12 +42,14 @@ function ModalWindow(props) {
     };
 
     dispatch(editTask(editedTask));
-    props.onHide();
+
+    onHide();
   };
 
   return (
     <Modal
-      {...props}
+      show={selectedTask}
+      onHide={onHide}
       size='lg'
       aria-labelledby='contained-modal-title-vcenter'
       centered
@@ -101,8 +103,9 @@ function ModalWindow(props) {
         </div>
         <div>
           <AssignedUsers
-            task={props.task}
-            show={props.show}
+            task={selectedTask}
+            setUpdateAssignments={setUpdateAssignments}
+            show={true}
           />
         </div>
       </Modal.Body>
