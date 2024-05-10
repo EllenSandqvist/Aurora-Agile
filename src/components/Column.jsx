@@ -138,6 +138,9 @@ const column = ({ currentColumn, columnId, user, handleTaskClick }) => {
           style={{
             position: 'absolute',
             zIndex: '100',
+            transform: 'translate(-50%, -50%)',
+            top: '50%',
+            left: '50%',
           }}
         >
           <Alert
@@ -145,7 +148,7 @@ const column = ({ currentColumn, columnId, user, handleTaskClick }) => {
             className='delete-popup'
           >
             <Alert.Heading>
-              Are you sure you want to delete this column?
+              Are you sure you want to delete the {currentColumn.title}-column?
             </Alert.Heading>
             <hr />
             <button
