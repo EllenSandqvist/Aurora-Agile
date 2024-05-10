@@ -7,13 +7,7 @@ import CreateNewTask from './CreateNewTask';
 import ModalWindow from './ModalWindow';
 import AddColumn from './AddColumn';
 
-const Board = ({
-  modalShow,
-  setModalShow,
-  selectedTask,
-  handleTaskClick,
-  user,
-}) => {
+const Board = ({ selectedTask, handleTaskClick, user, setSelectedTask }) => {
   const columns = useSelector((state) => state[columnSlice.name].columns);
 
   return (
@@ -39,9 +33,8 @@ const Board = ({
       </main>
       {selectedTask && (
         <ModalWindow
-          show={modalShow}
-          onHide={() => setModalShow(false)}
-          task={selectedTask}
+          onHide={() => setSelectedTask(null)}
+          selectedTask={selectedTask}
         />
       )}
     </>

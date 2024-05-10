@@ -12,8 +12,6 @@ const CreateNewTask = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [deadline, setDeadline] = useState('');
-  const [assignedTo, setAssignedTo] = useState([]);
-  const [doDate, setDoDate] = useState('');
 
   //Bootstrap
   const [show, setShow] = useState(false);
@@ -38,8 +36,8 @@ const CreateNewTask = () => {
         description,
         deadline,
         columnId: 1,
-        assignedTo,
-        doDate,
+        assignedTo: [],
+        doDate: '',
       })
     );
     //Reset inputfields after submitting form
@@ -47,8 +45,6 @@ const CreateNewTask = () => {
     setDescription('');
     setDeadline('');
     handleClick(e);
-
-    console.log();
   };
 
   return (

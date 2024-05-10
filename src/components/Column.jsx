@@ -21,6 +21,7 @@ const column = ({ currentColumn, columnId, user, handleTaskClick }) => {
   const [showDeletePopup, setShowDeletePopup] = useState(false);
 
   const tasks = useSelector((state) => state.task.tasks);
+  const columns = useSelector((state) => state.column.columns);
   const dispatch = useDispatch();
 
   // DROP - React-dnd
@@ -88,8 +89,9 @@ const column = ({ currentColumn, columnId, user, handleTaskClick }) => {
             onChange={(e) => setColumnTitle(e.target.value)}
             onBlur={() => editColumnHandler()}
           ></input>
-
-          <DeleteColumn onClick={() => removeColumnHandler()} />
+          {columns[0] !== currentColumn && (
+            <DeleteColumn onClick={() => removeColumnHandler()} />
+          )}
         </div>
 
         {/* TASKS HOLDER */}

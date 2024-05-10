@@ -12,14 +12,12 @@ import { useState } from 'react';
 
 function App() {
   const [user, setUser] = useState(null);
-  const [modalShow, setModalShow] = useState(false);
 
   // State For Selecting Task
   const [selectedTask, setSelectedTask] = useState(null);
 
   // Function To Choose The Selected Task
   const handleTaskClick = (task) => {
-    setModalShow(true);
     setSelectedTask(task);
   };
 
@@ -36,9 +34,8 @@ function App() {
               index
               element={
                 <Board
-                  setModalShow={setModalShow}
-                  modalShow={modalShow}
                   selectedTask={selectedTask}
+                  setSelectedTask={setSelectedTask}
                   handleTaskClick={handleTaskClick}
                   user={user}
                 />
@@ -48,9 +45,8 @@ function App() {
               path='/list'
               element={
                 <List
-                  setModalShow={setModalShow}
-                  modalShow={modalShow}
                   selectedTask={selectedTask}
+                  setSelectedTask={setSelectedTask}
                   handleTaskClick={handleTaskClick}
                 />
               }

@@ -9,8 +9,7 @@ import AssignedUsers from './AssignedUsers';
 // Slices
 import { removeTask, editTask } from '../features/task/taskSlice';
 
-function ModalWindow(props) {
-  console.log(props);
+function ModalWindow({ onHide, selectedTask }) {
   const [titleInput, setTitleInput] = useState('');
   const [descriptionInput, setDescriptionInput] = useState('');
   const [doDateInput, setDoDateInput] = useState('');
@@ -18,21 +17,21 @@ function ModalWindow(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setTitleInput(props.task.title);
-    setDescriptionInput(props.task.description);
-    setDoDateInput(props.task.doDate);
-    setDeadLineInput(props.task.deadline);
-  }, [props.task]);
+    setTitleInput(selectedTask.title);
+    setDescriptionInput(selectedTask.description);
+    setDoDateInput(selectedTask.doDate);
+    setDeadLineInput(selectedTask.deadline);
+  }, [selectedTask]);
 
   const removeTaskHandler = () => {
-    dispatch(removeTask(props.task.id));
-    props.onHide();
+    dispatch(removeTask(selectedTask.id));
+    onHide();
   };
 
   const editTaskHandler = () => {
     const editedTask = {
-      taskId: props.task.id,
-      assignedTo: props.task.assignedTo,
+      taskId: selectedTask.id,
+      assignedTo: selectedTask.assignedTo,
       newTitle: titleInput,
       newDescription: descriptionInput,
       newDeadline: deadlineInput,
@@ -40,12 +39,13 @@ function ModalWindow(props) {
     };
 
     dispatch(editTask(editedTask));
-    props.onHide();
+    onHide();
   };
 
   return (
     <Modal
-      {...props}
+      show={selectedTask}
+      onHide={onHide}
       size='lg'
       aria-labelledby='contained-modal-title-vcenter'
       centered
@@ -99,8 +99,8 @@ function ModalWindow(props) {
         </div>
         <div>
           <AssignedUsers
-            task={props.task}
-            show={props.show}
+            task={selectedTask}
+            show={true}
           />
         </div>
       </Modal.Body>

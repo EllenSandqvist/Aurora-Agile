@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import ModalWindow from './ModalWindow';
 import { columnSlice } from '../features/column/columnSlice';
 
-const List = ({ modalShow, setModalShow, selectedTask, handleTaskClick }) => {
+const List = ({ setSelectedTask, selectedTask, handleTaskClick }) => {
   const tasks = useSelector((state) => state.task.tasks);
   const columns = useSelector((state) => state[columnSlice.name].columns);
 
@@ -37,9 +37,8 @@ const List = ({ modalShow, setModalShow, selectedTask, handleTaskClick }) => {
       </ul>
       {selectedTask && (
         <ModalWindow
-          show={modalShow}
-          onHide={() => setModalShow(false)}
-          task={selectedTask}
+          onHide={() => setSelectedTask(null)}
+          selectedTask={selectedTask}
         />
       )}
     </main>
