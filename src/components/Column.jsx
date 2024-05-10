@@ -21,6 +21,7 @@ const column = ({ currentColumn, columnId, user, handleTaskClick }) => {
   const [showDeletePopup, setShowDeletePopup] = useState(false);
 
   const tasks = useSelector((state) => state.task.tasks);
+
   const columns = useSelector((state) => state.column.columns);
   const dispatch = useDispatch();
 
@@ -47,6 +48,10 @@ const column = ({ currentColumn, columnId, user, handleTaskClick }) => {
   };
 
   const confirmDeleteColumn = () => {
+    const moveTasks = tasks.filter((task) => task.columnId == columnId);
+    moveTasks.map((task) =>
+      dispatch(moveTask({ taskId: task.id, newColumnId: 1 }))
+    );
     dispatch(removeColumn(currentColumn));
     setShowDeletePopup(false);
   };
@@ -148,7 +153,11 @@ const column = ({ currentColumn, columnId, user, handleTaskClick }) => {
             className='delete-popup'
           >
             <Alert.Heading>
-              Are you sure you want to delete the {currentColumn.title}-column?
+              Are you sure you want to delete the "{currentColumn.title}"
+              column?
+              <p style={{ fontSize: '15px', marginTop: '1em', color: 'red' }}>
+                Tasks will be moved to the first column
+              </p>
             </Alert.Heading>
             <hr />
             <button
